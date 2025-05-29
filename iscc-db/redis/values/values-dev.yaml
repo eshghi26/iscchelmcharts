@@ -1,0 +1,15 @@
+auth:
+  password: myRootPassword
+
+master:
+  persistence:
+    size: 10Gi
+
+replica:
+  persistence:
+    size: 10Gi
+
+networkPolicy:
+  enabled: true
+  ingressNSMatchLabels:
+    environment: "development"
