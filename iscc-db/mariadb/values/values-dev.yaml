@@ -4,6 +4,7 @@ auth:
 
 replication:
   enabled: true
+  replicaCount: 2
 
 
 primary:
