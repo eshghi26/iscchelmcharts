@@ -25,7 +25,7 @@ internalDatabase:
 
 externalDatabase:
   enabled: true
-  host: mariadb-primary.isccdb-dev.svc.cluster.local
+  host: mariadb-galera.isccdb-dev.svc.cluster.local
   database: isccnextclouddb
   user: isccmysqladmin
   password: isccpassword
