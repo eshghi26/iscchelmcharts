@@ -1,15 +1,11 @@
-auth:
-  password: myRootPassword
+password: myRootPassword
 
-master:
-  persistence:
-    size: 10Gi
-
-replica:
-  persistence:
-    size: 10Gi
+persistence:
+  size: 13Gi
 
 networkPolicy:
   enabled: true
   ingressNSMatchLabels:
-    environment: "development"
+    environment: development
+  ingressNSPodMatchLabels:
+    environment: development

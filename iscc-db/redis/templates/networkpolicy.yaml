@@ -5,7 +5,7 @@ SPDX-License-Identifier: APACHE-2.0
 
 {{- if .Values.networkPolicy.enabled }}
 kind: NetworkPolicy
-apiVersion: {{ template "common.capabilities.networkPolicy.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -14,8 +14,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.redis.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
-    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   policyTypes:
     - Ingress
     - Egress
@@ -24,21 +25,19 @@ spec:
     - {}
   {{- else }}
   egress:
-    {{- if eq .Values.architecture "replication" }}
     # Allow dns resolution
     - ports:
-        - port: 53
-          protocol: UDP
+      - port: 53
+        protocol: TCP
+      - port: 53
+        protocol: UDP
     # Allow outbound connections to other cluster pods
     - ports:
-        - port: {{ .Values.master.containerPorts.redis }}
-        {{- if .Values.sentinel.enabled }}
-        - port: {{ .Values.sentinel.containerPorts.sentinel }}
-        {{- end }}
+        - port: {{ .Values.redis.containerPorts.redis }}
+        - port: {{ .Values.redis.containerPorts.bus }}
       to:
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-    {{- end }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
     {{- if .Values.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
@@ -46,62 +45,36 @@ spec:
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ .Values.master.containerPorts.redis }}
-        {{- if .Values.sentinel.enabled }}
-        - port: {{ .Values.sentinel.containerPorts.sentinel }}
+        - port: {{ .Values.redis.containerPorts.redis }}
+        - port: {{ .Values.redis.containerPorts.bus }}
+        {{- if .Values.metrics.enabled }}
+        # Allow prometheus scrapes for metrics
+        - port: {{ .Values.metrics.containerPorts.http }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+        - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-        {{- if or .Values.networkPolicy.ingressNSMatchLabels .Values.networkPolicy.ingressNSPodMatchLabels }}
+             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+        {{- end }}
+        {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
-              {{- if .Values.networkPolicy.ingressNSMatchLabels }}
-                {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
-                {{ $key | quote }}: {{ $value | quote }}
-                {{- end }}
-              {{ else }}
-                {}
+              {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
               {{- end }}
-          {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
-          podSelector:
+        {{- end }}
+        {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
+        - podSelector:
             matchLabels:
               {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
               {{ $key | quote }}: {{ $value | quote }}
               {{- end }}
-          {{- end }}
-        {{- end }}
       {{- end }}
-    {{- if .Values.metrics.enabled }}
-    # Allow prometheus scrapes for metrics
-    - ports:
-        - port: {{ .Values.metrics.containerPorts.http }}
-      {{- if not .Values.networkPolicy.metrics.allowExternal }}
-      from:
-        {{- if or .Values.networkPolicy.metrics.ingressNSMatchLabels .Values.networkPolicy.metrics.ingressNSPodMatchLabels }}
-        - namespaceSelector:
-            matchLabels:
-              {{- if .Values.networkPolicy.metrics.ingressNSMatchLabels }}
-                {{- range $key, $value := .Values.networkPolicy.metrics.ingressNSMatchLabels }}
-                {{ $key | quote }}: {{ $value | quote }}
-                {{- end }}
-              {{ else }}
-                {}
-              {{- end }}
-          {{- if .Values.networkPolicy.metrics.ingressNSPodMatchLabels }}
-          podSelector:
-            matchLabels:
-              {{- range $key, $value := .Values.networkPolicy.metrics.ingressNSPodMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
-          {{- end }}
-        {{- end }}
-      {{- end }}
-    {{- end }}
     {{- if .Values.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}

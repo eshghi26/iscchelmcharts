@@ -3,9 +3,9 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.usePassword (not .Values.existingSecret) }}
-apiVersion: v1
-kind: Secret
+{{- if .Values.rbac.create }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: Role
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -13,7 +13,14 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-type: Opaque
-data:
-  redis-password: {{ include "redis-cluster.password" . | b64enc | quote }}
+rules:
+  {{- if and (include "common.capabilities.psp.supported" .) .Values.podSecurityPolicy.create }}
+  - apiGroups: ['policy']
+    resources: ['podsecuritypolicies']
+    verbs: ['use']
+    resourceNames: [{{ template "common.names.fullname" . }}]
+{{- end }}
+{{- if .Values.rbac.role.rules }}
+{{- toYaml .Values.rbac.role.rules | nindent 2 }}
+{{- end }}
 {{- end }}
