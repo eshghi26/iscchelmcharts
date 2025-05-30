@@ -16,5 +16,4 @@ commonLabels:
   environment: development
 
 image:
-  repository: bitnami/mariadb-galera
-  tag: 11.7.2
+  tag: sha256:8c828e235137e095686e6a5c51ddecf841866071e543d0684aae8c85ef7c6ac5
