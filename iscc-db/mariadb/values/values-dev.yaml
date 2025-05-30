@@ -16,4 +16,5 @@ commonLabels:
   environment: development
 
 image:
-  digest: 11.7.2
+  repository: bitnami/mariadb-galera
+  tag: 11.7.2
