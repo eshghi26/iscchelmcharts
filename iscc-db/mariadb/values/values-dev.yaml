@@ -1,6 +1,9 @@
+architecture: "replication"
+
 auth:
   rootPassword: myRootPassword
   database: myDatabase
+  replicationPassword: "newReplicationPassword123"
 
 replication:
   enabled: true
