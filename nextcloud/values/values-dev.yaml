@@ -12,10 +12,6 @@ nextcloud:
     - name: REDIS_HOST_PASSWORD
       value: myRootPassword
 
-#redis:
-#  auth:
-#    password: myRootPassword
-
 replicaCount: 2
 
 internalDatabase:

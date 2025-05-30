@@ -11,3 +11,7 @@ networkPolicy:
     environment: development
 
 fullnameOverride: redis
+
+redis:
+  livenessProbe:
+    initialDelaySeconds: 120
