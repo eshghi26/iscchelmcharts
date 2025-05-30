@@ -14,6 +14,3 @@ commonLabels:
   app.kubernetes.io/name: mariadb
   app.kubernetes.io/version: 11.7.2
   environment: development
-
-image:
-  tag: sha256:8c828e235137e095686e6a5c51ddecf841866071e543d0684aae8c85ef7c6ac5
