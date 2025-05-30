@@ -6,13 +6,6 @@ nextcloud:
   host: nextcloud.iscc-system.org
   username: admin
   password: isccpassword
-#  extraEnv:
-#    - name: REDIS_HOST
-#      value: redis-master.isccdb-dev.svc.cluster.local
-#    - name: REDIS_HOST_PORT
-#      value: "6379"
-#    - name: REDIS_PASSWORD
-#      value: myRootPassword
 
 redis:
   auth:
@@ -25,7 +18,7 @@ internalDatabase:
 
 externalDatabase:
   enabled: true
-  host: mariadb-galera.isccdb-dev.svc.cluster.local
+  host: mariadb.isccdb-dev.svc.cluster.local
   database: isccnextclouddb
   user: isccmysqladmin
   password: isccpassword

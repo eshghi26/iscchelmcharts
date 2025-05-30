@@ -24,7 +24,7 @@ spec:
               done
           env:
             - name: MYSQL_HOST
-              value: mariadb-galera.isccdb-dev.svc.cluster.local
+              value: mariadb.isccdb-dev.svc.cluster.local
             - name: MYSQL_ROOT_PASSWORD
               value: myRootPassword
             - name: MYSQL_DEFAULT_DATABASE
@@ -47,7 +47,7 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               value: myRootPassword
             - name: MYSQL_HOST
-              value: mariadb-galera.isccdb-dev.svc.cluster.local
+              value: mariadb.isccdb-dev.svc.cluster.local
             - name: MYSQL_USER
               value: isccmysqladmin
             - name: MYSQL_DATABASE
