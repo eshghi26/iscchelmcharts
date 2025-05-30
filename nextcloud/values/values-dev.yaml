@@ -8,7 +8,7 @@ nextcloud:
   password: isccpassword
   extraEnv:
     - name: REDIS_HOST
-      value: redis.isccdb-dev.svc.cluster.local
+      value: redis-master.isccdb-dev.svc.cluster.local
     - name: REDIS_HOST_PORT
       value: "6379"
     - name: REDIS_PASSWORD
