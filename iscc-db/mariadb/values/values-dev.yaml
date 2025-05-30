@@ -11,11 +11,25 @@ replication:
 
 
 primary:
+  resources:
+    requests:
+      cpu: "1"
+      memory: "1000Mi"
+    limits:
+      cpu: "1"
+      memory: "1000Mi"
   persistence:
     size: 12Gi
 
 secondary:
   replicaCount: 2
+  resources:
+    requests:
+      cpu: "1"
+      memory: "1000Mi"
+    limits:
+      cpu: "1"
+      memory: "1000Mi"
   persistence:
     size: 11Gi
 
