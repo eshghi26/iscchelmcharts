@@ -6,10 +6,15 @@ nextcloud:
   host: nextcloud.iscc-system.org
   username: admin
   password: isccpassword
+  extraEnv:
+    - name: REDIS_HOST
+      value: redis.isccdb-dev.svc.cluster.local
+    - name: REDIS_HOST_PASSWORD
+      value: myRootPassword
 
-redis:
-  auth:
-    password: myRootPassword
+#redis:
+#  auth:
+#    password: myRootPassword
 
 replicaCount: 2
 
@@ -53,7 +58,12 @@ ingress:
         - nextcloud.iscc-system.org
       secretName: nextcloud-tls
 
-redis:
-  enabled: true
-  auth:
-    password: myRootPassword
+commonLabels:
+  app.kubernetes.io/component: nextcloud
+  app.kubernetes.io/instance: nextcloud
+  app.kubernetes.io/name: nextcloud
+  app.kubernetes.io/version: 31.0.5
+  environment: development
+
+image:
+  tag: 31.0.5
