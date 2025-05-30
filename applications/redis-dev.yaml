@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-dev
+  namespace: argocd
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: isccdb-dev
+  project: default
+  source:
+    repoURL: https://github.com/eshghi26/iscchelmcharts.git
+    path: iscc-db/redis
+    targetRevision: main
+    helm:
+      releaseName: redis
+      valueFiles:
+        - values/values-dev.yaml

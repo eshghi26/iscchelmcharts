@@ -24,49 +24,25 @@ spec:
               done
           env:
             - name: MYSQL_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: preinstall-secret
-                  key: MYSQL_HOST
+              value: mariadb.isccdb-dev.svc.cluster.local
             - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: preinstall-secret
-                  key: MYSQL_ROOT_PASSWORD
+              value: myRootPassword
             - name: MYSQL_DEFAULT_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: preinstall-secret
-                  key: MYSQL_DEFAULT_DATABASE
+              value: myDatabase
       containers:
         - name: create-db
           image: mariadb:10.11
           env:
             - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: preinstall-secret
-                  key: MYSQL_ROOT_PASSWORD
+              value: myRootPassword
             - name: MYSQL_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: preinstall-secret
-                  key: MYSQL_HOST
+              value: mariadb.isccdb-dev.svc.cluster.local
             - name: MYSQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: preinstall-secret
-                  key: NEXTCLOUD_MYSQL_USER
+              value: isccmysqladmin
             - name: MYSQL_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: preinstall-secret
-                  key: NEXTCLOUD_MYSQL_DATABASE
+              value: isccnextclouddb
             - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: preinstall-secret
-                  key: NEXTCLOUD_MYSQL_PASSWORD
+              value: isccpassword
           command: ["sh", "-c"]
           args:
             - |

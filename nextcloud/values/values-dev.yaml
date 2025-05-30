@@ -12,10 +12,7 @@ nextcloud:
     - name: REDIS_HOST_PORT
       value: "6379"
     - name: REDIS_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: preinstall-secret
-          key: REDIS_PASSWORD
+      value: myRootPassword
 
 replicaCount: 2
 
