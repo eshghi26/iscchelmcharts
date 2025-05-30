@@ -9,3 +9,5 @@ networkPolicy:
     environment: development
   ingressNSPodMatchLabels:
     environment: development
+
+fullnameOverride: redis
