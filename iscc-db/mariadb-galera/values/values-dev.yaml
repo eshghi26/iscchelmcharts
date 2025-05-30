@@ -1,0 +1,9 @@
+rootUser:
+  password: myRootPassword
+
+db:
+  name: myDatabase
+
+networkPolicy:
+  ingressNSMatchLabels:
+    environment: "development"

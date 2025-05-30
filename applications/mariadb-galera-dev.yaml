@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mariadb-galera-dev
+  namespace: argocd
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: isccdb-dev
+  project: default
+  source:
+    repoURL: https://github.com/eshghi26/iscchelmcharts.git
+    path: iscc-db/mariadb-galera
+    targetRevision: main
+    helm:
+      releaseName: mariadb-galera
+      valueFiles:
+        - values/values-dev.yaml
