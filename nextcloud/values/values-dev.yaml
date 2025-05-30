@@ -13,6 +13,15 @@ nextcloud:
       value: "6379"
     - name: REDIS_PASSWORD
       value: myRootPassword
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000  # common non-root UID; change if needed
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    seccompProfile:
+      type: RuntimeDefault
 
 replicaCount: 2
 
