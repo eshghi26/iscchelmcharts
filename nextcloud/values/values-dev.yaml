@@ -14,6 +14,12 @@ nextcloud:
 #    - name: REDIS_PASSWORD
 #      value: myRootPassword
 
+redis:
+  enabled: false
+  host: redis-master.isccdb-dev.svc.cluster.local
+  port: 6379
+  password: myRootPassword
+
 replicaCount: 2
 
 internalDatabase:
