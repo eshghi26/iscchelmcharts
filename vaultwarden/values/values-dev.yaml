@@ -6,8 +6,9 @@ env:
   DOMAIN: https://vaultwarden-dev.iscc-system.org
 
 persistence:
-  data:
+  config:
     enabled: true
+    accessMode: ReadWriteOnce
     size: 1Gi
 
 ingress:
