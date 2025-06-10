@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vaultwarden-dev
+  namespace: argocd
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: vaultwarden-dev
+  project: default
+  source:
+    repoURL: https://github.com/eshghi26/iscchelmcharts.git
+    path: vaultwarden
+    targetRevision: main
+    helm:
+      releaseName: vaultwarden
+      valueFiles:
+        - values/values-dev.yaml

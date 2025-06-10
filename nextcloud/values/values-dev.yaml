@@ -1,6 +1,6 @@
 nextcloud:
   trustedDomains:
-    - 'nextcloud.nextcloud.svc.cluster.local'
+    - 'nextcloud.nextcloud-dev.svc.cluster.local'
     - 'nextcloud.iscc-system.org'
   fullname: nextcloud-dev
   host: nextcloud.iscc-system.org
