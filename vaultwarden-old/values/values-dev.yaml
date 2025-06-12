@@ -1,0 +1,39 @@
+env:
+  DATABASE_URL: mysql://isccmysqladmin:isccpassword@mariadb.isccdb-dev.svc.cluster.local/isccvaultwardendb
+  ADMIN_TOKEN: kvJINoZ/9EJbTVyFXqmTGW5Fo/Gr1xKQRFEXF0qISLyrTUVfSTmeNXL9nBNCXkAG
+  WEBSOCKET_ENABLED: true
+  SIGNUPS_ALLOWED: false
+  DOMAIN: https://vaultwarden-dev.iscc-system.org
+
+persistence:
+  config:
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: 1Gi
+
+ingress:
+  main:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    hosts:
+      - host: vaultwarden-dev.iscc-system.org
+        paths:
+          - path: /
+            pathType: Prefix
+            service:
+              port: http
+          - path: /notifications/hub/negotiate
+            pathType: Prefix
+            service:
+              port: http
+          - path: /notifications/hub
+            pathType: Prefix
+            service:
+              port: websocket
+    ingressClassName: external
+    tls:
+      - hosts:
+          - vaultwarden-dev.iscc-system.org
+        secretName: vaultwarden-dev-tls
